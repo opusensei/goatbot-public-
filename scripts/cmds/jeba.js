@@ -1,32 +1,46 @@
-const { GoatWrapper } = require("fca-liane-utils");
 const axios = require("axios");
 
+const baseURL = "https://rasin-x-apis.onrender.com/api/rasin";
+const teachURL = `${baseURL}/teach`;
+const chatURL = `${baseURL}/jeba`;
+const listURL = `${baseURL}/list?count=true`;
+
 const conversationMemory = {};
+const rasin = ["jeba", "bby", "nusu", "bot", "xuna"];
+const noContentReplies = [
+  "Hae babe bolo 🥹🫶🏻",
+  "Hae bolo suntechi 😒",
+  "Kisse tor 😒",
+  "Hae Xuna Bolo🥺"
+];
 
 module.exports = {
   config: {
-    name: "jeba", // Don't change this name.
-    aliases: ["jeba", "bby", "nusu"],
-    version: "1.4.0",
+    name: "jeba",
+    aliases: rasin,
+    version: "2.0.0",
     author: "Tasbiul Islam Rasin",
-    countDown: 2,
+    countDown: 1,
     role: 0,
-    longDescription: {
-      en: "Engage in conversation with Jeba!"
-    },
-    category: "SimSimi",
-    guide: {
-      en: "[p]Jeba <message> | [p]Jeba teach <teach> => <response> | [p]Jeba list"
-    }
+    longDescription: { en: "Chat with Jeba" },
+    category: "Simsimi",
+    guide: { en: "Say jeba <your_message>" }
   },
 
-  onStart: async function ({ api, event, args }) {
-    const { messageID, threadID, senderID } = event;
-    const content = args.join(" ").trim();
+  onChat: async function ({ api, event }) {
+    const { body, threadID, senderID, messageID } = event;
+    if (!body) return;
 
-    if (!content) {
-      return api.sendMessage("Hae bby bolo 🥹🫶🏻", threadID, (err, info) => {
-        if (!err) {
+    const lower = body.toLowerCase().trim();
+    const triggered = rasin.some(word => lower.startsWith(word));
+    if (!triggered) return;
+
+    const raw = lower.replace(new RegExp(`^(${rasin.join("|")})\\s*`, "i"), "").trim();
+
+    if (!raw) {
+      const reply = noContentReplies[Math.floor(Math.random() * noContentReplies.length)];
+      return api.sendMessage(reply, threadID, (_, info) => {
+        if (info) {
           global.GoatBot.onReply.set(info.messageID, {
             commandName: "jeba",
             type: "reply",
@@ -38,91 +52,53 @@ module.exports = {
     }
 
     try {
-      if (content.toLowerCase() === "list") {
-        const response = await axios.get("https://rasin-x-apis-main.onrender.com/api/rasin/jeba?count=true");
-        return api.sendMessage(response.data.status === "success" ? response.data.message : "❌", threadID, messageID);
+      if (raw === "list") {
+        const res = await axios.get(listURL);
+        return api.sendMessage(res.data.status === "success" ? res.data.message : "❌", threadID, messageID);
       }
 
-      if (content.toLowerCase() === "teach") {
-        return api.sendMessage("✏ 𝐓𝐞𝐚𝐜𝐡:\n\nJeba teach hi => hey, how are u, hello\n\n𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐝 𝐛𝐲 𝐑𝐚𝐬𝐢𝐧", threadID, messageID);
+      if (raw === "teach") {
+        return api.sendMessage(
+          "✏ 𝐓𝐞𝐚𝐜𝐡:\n\nJeba teach hi => hey, how are u, hello\n\n𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐝 𝐛𝐲 𝐑𝐚𝐬𝐢𝐧",
+          threadID,
+          messageID
+        );
       }
 
-      if (content.startsWith("teach ")) {
-  const [phrase, responseText] = content.substring(6).split("=>").map(i => i.trim());
-  if (!phrase || !responseText) 
-    return api.sendMessage("Usage: [p]Jeba teach <teach> => <reply1, reply2, reply3>", threadID, messageID);
+      if (raw.startsWith("teach ")) {
+        const [phrase, replyText] = raw.substring(6).split("=>").map(p => p.trim());
 
-  const replies = responseText.split(',').map(reply => reply.trim());
-  const teachApiUrl = `https://rasin-x-apis-main.onrender.com/api/rasin/jeba?ask=${encodeURIComponent(phrase)}&reply=${encodeURIComponent(replies.join(','))}`;
+        if (!phrase || !replyText) {
+          return api.sendMessage("Usage: jeba teach <text> => <reply1, reply2...>", threadID, messageID);
+        }
 
-  try {
-    const response = await axios.get(teachApiUrl);
+        const replies = replyText.split(",").map(r => r.trim());
+        const teachReq = `${teachURL}?ask=${encodeURIComponent(phrase)}&reply=${encodeURIComponent(replies.join(","))}`;
+        const res = await axios.get(teachReq);
 
-    if (response.data.status === "error") {
-      return api.sendMessage(response.data.message || "❌ Failed to teach.", threadID, messageID);
-    }
+        if (res.data.status === "error") {
+          return api.sendMessage(res.data.message || "Failed to teach.", threadID, messageID);
+        }
 
-    if (response.data.ask && response.data.reply) {
-      return api.sendMessage(`𝚂𝚞𝚌𝚌𝚎𝚜𝚜𝚏𝚞𝚕𝚕𝚢 𝚃𝚎𝚊𝚌𝚑\n\n🗨 𝙽𝚎𝚠 𝚃𝚎𝚊𝚌𝚑 [ ${response.data.ask} ]\n💬 𝚁𝚎𝚙𝚕𝚢 [ ${response.data.reply} ]\n\n𝙱𝚢 𝚃𝚊𝚜𝚋𝚒𝚞𝚕 𝙸𝚜𝚕𝚊𝚖 𝚁𝚊𝚜𝚒𝚗 🙆‍♂️`, threadID, messageID);
-    } else {
-      return api.sendMessage("❌ Failed to teach.", threadID, messageID);
-    }
-  } catch (error) {
-    if (error.response && error.response.data && error.response.data.message) {
-      return api.sendMessage(error.response.data.message, threadID, messageID);
-    }
-    console.error("Error teaching:", error);
-    return api.sendMessage("❌ An error occurred while teaching.", threadID, messageID);
-  }
-}
+        return api.sendMessage(
+          `✅ 𝚂𝚞𝚌𝚌𝚎𝚜𝚜𝚏𝚞𝚕𝚕𝚢 𝚃𝚎𝚊𝚌𝚑\n\nNᴇᴡ Tᴇᴀᴄʜ 【 ${res.data.new_teach} 】\nNᴇᴡ 𝖱ᴇᴘʟʏ 【 ${res.data.new_reply} 】\n\n${res.data.message2 || ""}`,
+          threadID,
+          messageID
+        );
+      }
 
-      let apiUrl = `https://rasin-x-apis-main.onrender.com/api/rasin/jeba?msg=${encodeURIComponent(content)}`;
       const key = `${threadID}_${senderID}`;
-
+      let url = `${chatURL}?msg=${encodeURIComponent(raw)}`;
       if (conversationMemory[key]) {
-        apiUrl += `&prev=${encodeURIComponent(conversationMemory[key])}`;
+        url += `&prev=${encodeURIComponent(conversationMemory[key])}`;
       }
 
-      const response = await axios.get(apiUrl);
-      const botReply = response.data.response || "❌ No response from API.";
-
+      const res = await axios.get(url);
+      const botReply = res.data.response || "Hi kaman asan ?";
       conversationMemory[key] = botReply;
 
-      await api.sendMessage(botReply, threadID, (error, info) => {
-        if (!error) {
-          global.GoatBot.onReply.set(info.messageID, {
-            commandName: "jeba",
-            type: "reply",
-            messageID: info.messageID,
-            author: senderID
-          });
-        }
-      }, messageID);
-
-    } catch (error) {
-      console.error("❌ | Error processing Jeba", error);
-      api.sendMessage("❌ | An error occurred while processing the request.", threadID, messageID);
-    }
-  },
-
-  onReply: async function ({ api, event }) {
-    const { threadID, senderID, messageID, body } = event;
-    const userMsg = body.trim();
-    const key = `${threadID}_${senderID}`;
-
-    try {
-      let apiUrl = `https://rasin-x-apis-main.onrender.com/api/rasin/jeba?msg=${encodeURIComponent(userMsg)}`;
-      if (conversationMemory[key]) {
-        apiUrl += `&prev=${encodeURIComponent(conversationMemory[key])}`;
-      }
-
-      const response = await axios.get(apiUrl);
-      const botReply = response.data.response || "❌ No response from API.";
-
-      conversationMemory[key] = botReply;
-
-      await api.sendMessage(botReply, threadID, (error, info) => {
-        if (!error) {
+      return api.sendMessage(botReply, threadID, (_, info) => {
+        if (info) {
           global.GoatBot.onReply.set(info.messageID, {
             commandName: "jeba",
             type: "reply",
@@ -132,11 +108,41 @@ module.exports = {
         }
       }, messageID);
     } catch (err) {
-      console.error("❌ | Error in onReply:", err);
-      api.sendMessage("❌ | Error while replying.", threadID, messageID);
+      console.error("Error in Jeba Chat:", err);
+      return api.sendMessage("an error occurred.", threadID, messageID);
+    }
+  },
+
+  onReply: async function ({ api, event }) {
+    const { threadID, senderID, messageID, body } = event;
+    const msg = body?.trim();
+    const key = `${threadID}_${senderID}`;
+
+    if (!msg) return;
+
+    try {
+      let url = `${chatURL}?msg=${encodeURIComponent(msg)}`;
+      if (conversationMemory[key]) {
+        url += `&prev=${encodeURIComponent(conversationMemory[key])}`;
+      }
+
+      const res = await axios.get(url);
+      const reply = res.data.response || "Hi kamon asen?";
+      conversationMemory[key] = reply;
+
+      return api.sendMessage(reply, threadID, (_, info) => {
+        if (info) {
+          global.GoatBot.onReply.set(info.messageID, {
+            commandName: "jeba",
+            type: "reply",
+            messageID: info.messageID,
+            author: senderID
+          });
+        }
+      }, messageID);
+    } catch (err) {
+      console.error("Error in Jeba Reply:", err);
+      return api.sendMessage("Error while replying.", threadID, messageID);
     }
   }
 };
-
-const wrapper = new GoatWrapper(module.exports);
-wrapper.applyNoPrefix({ allowPrefix: true });
