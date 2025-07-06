@@ -63,7 +63,6 @@ module.exports = {
       return message.reply("𝙾𝚗𝚕𝚢 𝚝𝚑𝚎 𝚞𝚜𝚎𝚛 𝚠𝚑𝚘 𝚒𝚗𝚒𝚝𝚒𝚊𝚝𝚎𝚍 𝚝𝚑𝚒𝚜 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚌𝚊𝚗 𝚛𝚎𝚙𝚕𝚢");
     }
 
-    // Handle continuous editing - when user replies to bot's edited image
     if (type === "continue_edit") {
       const newPrompt = event.body.trim();
       if (!newPrompt) {
@@ -124,7 +123,7 @@ module.exports = {
     api.setMessageReaction("⏳", event.messageID, () => {}, true);
 
     try {
-      const rasin = `https://rasin-x-apis.onrender.com/api/rasin/edit?prompt=${encodeURIComponent(prompt)}&url=${encodeURIComponent(imageUrl)}`;
+      const rasin = `https://rasin-x-apis.onrender.com/api/rasin/edit?prompt=${encodeURIComponent(prompt)}&url=${encodeURIComponent(imageUrl)}&apikey=rs_jgcrn577-hh4x-358p-9na9-vf`;
 
       const res = await axios.get(rasin);
       const resultImageUrl = res.data.img_url;
@@ -135,7 +134,6 @@ module.exports = {
         attachment: await global.utils.getStreamFromURL(resultImageUrl)
       });
 
-      // Set onReply for continuous editing
       global.GoatBot.onReply.set(sentMsg.messageID, {
         messageID: sentMsg.messageID,
         commandName: this.config.name,
