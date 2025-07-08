@@ -21,7 +21,7 @@ module.exports = {
     api.sendMessage("🗨️ | 𝙳𝚎𝚎𝚙𝚂𝚎𝚎𝚔 (𝚁1) 𝚒𝚜 𝚝𝚑𝚒𝚗𝚔𝚒𝚗𝚐...", event.threadID, event.messageID);
 
     try {
-      const res = await axios.get(`https://rasin-x-apis.onrender.com/api/rasin/deepseekr1?message=${encodeURIComponent(inputText)}`);
+      const res = await axios.get(`https://rasin-x-apis.onrender.com/api/rasin/deepseekr1?message=${encodeURIComponent(inputText)}&apikey=rs_s0jpc8pu-x9vu-f9uj-4pvp-ol`);
       const reply = formatFont(res.data.response);
       api.sendMessage(`🎓 𝗗𝗲𝗲𝗽𝗦𝗲𝗲𝗸 ( 𝗥1 )\n\n${reply}`, event.threadID, event.messageID);
     } catch (err) {
@@ -46,7 +46,7 @@ module.exports = {
     api.sendMessage("🗨️ | 𝙳𝚎𝚎𝚙𝚂𝚎𝚎𝚔 (𝚁1) 𝚒𝚜 𝚝𝚑𝚒𝚗𝚔𝚒𝚗𝚐...", event.threadID, event.messageID);
 
     try {
-      const res = await axios.get(`https://rasin-x-apis.onrender.com/api/rasin/deepseekr1?message=${encodeURIComponent(args.join(" "))}`);
+      const res = await axios.get(`https://rasin-x-apis.onrender.com/api/rasin/deepseekr1?message=${encodeURIComponent(args.join(" "))}&apikey=rs_s0jpc8pu-x9vu-f9uj-4pvp-ol`);
       const reply = formatFont(res.data.response);
       api.sendMessage(`🎓 𝗗𝗲𝗲𝗽𝗦𝗲𝗲𝗸 ( 𝗥1 )\n\n${reply}`, event.threadID, event.messageID);
     } catch (err) {
