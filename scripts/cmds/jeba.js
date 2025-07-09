@@ -17,13 +17,13 @@ const noContentReplies = [
 module.exports = {
   config: {
     name: "jeba",
-    aliases: rasin,
+    aliases: "rasin",
     version: "2.0.0",
-    author: "Tasbiul Islam Rasin",
+    author: "Apu Sensei",
     countDown: 1,
     role: 0,
     longDescription: { en: "Chat with Jeba" },
-    category: "Simsimi",
+    category: "AI",
     guide: { en: "Say jeba <your_message>" }
   },
 
