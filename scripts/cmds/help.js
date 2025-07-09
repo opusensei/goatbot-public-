@@ -4,7 +4,7 @@ module.exports = {
     name: "help",
     aliases: ["menu"],
     version: "1.0",
-    author: "Developer Rasin",
+    author: "Developer opu",
     usePrefix: false,
     countDown: 5,
     role: 0,
@@ -37,13 +37,13 @@ module.exports = {
       }
 
       for (const [category, cmds] of Object.entries(categories)) {
-        responseMessage += `\n╭────────⭓\n`;
+        responseMessage += `\n╭────────🎀\n`;
         responseMessage += `\│『 ${category.toUpperCase()} 』\n`;
-        responseMessage += cmds.map((cmd) => `│ 🙂 ${cmd}`).join("\n") + "\n";
-        responseMessage += `╰────────⭓`;
+        responseMessage += cmds.map((cmd) => `│ 💠 ${cmd}`).join("\n") + "\n";
+        responseMessage += `╰────────🎀`;
       }
 
-      responseMessage += `\n╭───────────────➣\n│ 𝐂𝐮𝐫𝐫𝐞𝐧𝐭𝐥𝐲, 𝐭𝐡𝐞 𝐛𝐨𝐭 𝐡𝐚𝐬 [${totalCommands}]\n│ 𝐜𝐨𝐦𝐦𝐚𝐧𝐝𝐬.\n│ 𝐔𝐬𝐞 'help (cmd)' 𝐭𝐨 𝐠𝐞𝐭 𝐦𝐨𝐫𝐞\n│ 𝐝𝐞𝐭𝐚𝐢𝐥𝐬.\n│ 𝐂𝐫𝐞𝐚𝐭𝐨𝐫: 𝐓𝐚𝐬𝐛𝐢𝐮𝐥 𝐈𝐬𝐥𝐚𝐦 𝐑𝐚𝐬𝐢𝐧\n╰───────────────➣`;
+      responseMessage += `\n╭───────────────➣\n│ 𝐂𝐮𝐫𝐫𝐞𝐧𝐭𝐥𝐲, 𝐭𝐡𝐞 𝐛𝐨𝐭 𝐡𝐚𝐬 [${totalCommands}]\n│ 𝐜𝐨𝐦𝐦𝐚𝐧𝐝𝐬.\n│ 𝐔𝐬𝐞 'help (cmd)' 𝐭𝐨 𝐠𝐞𝐭 𝐦𝐨𝐫𝐞\n│ 𝐝𝐞𝐭𝐚𝐢𝐥𝐬.\n│ 𝐂𝐫𝐞𝐚𝐭𝐨𝐫: 𝐎𝐏𝐔 𝐒𝐄𝐍𝐒𝐄\n╰───────────────➣`;
 
       return api.sendMessage(responseMessage, threadID, messageID);
     }
@@ -60,7 +60,7 @@ module.exports = {
     const guide = config.guide?.en || "No usage guide available.";
     const description = config.longDescription?.en || "No description available.";
     const response =
-      `✿──────────────────✿ \n\n` +
+      `🎀──────────────────🎀 \n\n` +
       `🔍 𝐂𝐨𝐦𝐦𝐚𝐧𝐝 𝐃𝐞𝐭𝐚𝐢𝐥𝐬 🔎\n\n` +
       `🌟 | 𝐍𝐚𝐦𝐞: ${config.name}\n` +
       `🔀 | 𝐀𝐥𝐢𝐚𝐬𝐞𝐬: ${config.aliases?.join(", ") || "None"}\n` +
@@ -69,7 +69,7 @@ module.exports = {
       `🗂️ | 𝐕𝐞𝐫𝐬𝐢𝐨𝐧: ${config.version || "1.0"}\n` +
       `✍️ | 𝐀𝐮𝐭𝐡𝐨𝐫: ${config.author || "Unknown"}\n` +
       `⏳ | 𝐂𝐨𝐨𝐥𝐝𝐨𝐰𝐧: ${config.countDown || 0}s\n` +
-      `🔑 | 𝐑𝐨𝐥𝐞: ${config.role || 0}\n\n✿──────────────────✿`;
+      `🔑 | 𝐑𝐨𝐥𝐞: ${config.role || 0}\n\n🎀──────────────────🎀`;
 
     return api.sendMessage(response, threadID, messageID);
   }
