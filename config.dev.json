@@ -6,9 +6,9 @@
 
   "facebookAccount": {
 
-    "email": "your_gmail@gmail.com",
+    "email": "gojo.bot25@gmail.com ",
 
-    "password": "mone.nai",
+    "password": "@gojo-bot+999",
 
     "2FASecret": "",
 
@@ -52,9 +52,9 @@
 
   },
 
-  "nickNameBot": "Your_Bot_Name",
+  "nickNameBot": "𝗖𝗛𝗜𝗞𝗢 ♉",
 
-  "prefix": "!",
+  "prefix": "+",
 
   "vipUser": [
 
@@ -84,13 +84,13 @@
 
   "adminBot": [
 
-    "100083520680035",
+    "61577055977574",
 
-    "61559599768817",
+    "",
 
-    "100018893430564",
+    "",
 
-    "61557991443492"
+    ""
 
   ],
 
