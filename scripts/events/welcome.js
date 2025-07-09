@@ -6,7 +6,7 @@ module.exports = {
 	config: {
 		name: "welcome",
 		version: "1.7",
-		author: "NTKhang ( modified my ChatGPT )",
+		author: "NTKhang",
 		category: "events"
 	},
 
@@ -26,10 +26,10 @@ module.exports = {
 			session2: "noon",
 			session3: "afternoon",
 			session4: "evening",
-			welcomeMessage: "Dʀᴇᴀᴍʏ Cʜᴀᴛ 𝙲𝚘𝚗𝚗𝚎𝚌𝚝𝚎𝚍 𝚂𝚞𝚌𝚌𝚎𝚜𝚜𝚏𝚞𝚕𝚕𝚢 🐝\n\n𝖧𝖾𝗅𝗅𝗈 😻\n𝖧𝖾𝗋𝖾'𝗌 𝗆𝗒 𝗉𝗋𝖾𝖿𝗂𝗑 ( {prefix} )\n𝖴𝗌𝖾 ( {prefix}𝖧𝖾𝗅𝗉 ) 𝗍𝗈 𝗌𝖾𝖾 𝖺𝗏𝖺𝗂𝗅𝖺𝖻𝗅𝖾 𝖼𝗈𝗆𝗆𝖺𝗇𝖽𝗌.\n𝖧𝖾𝗋𝖾'𝗌 𝗆𝗒 𝗈𝗐𝗇𝖾𝗋 𝗇𝖺𝗆𝖾 𝚃𝚊𝚜𝚋𝚒𝚞𝚕 𝙸𝚜𝚕𝚊𝚖 𝚁𝚊𝚜𝚒𝚗\n𝖴𝗌𝖾 {prefix}𝖢𝖺𝗅𝗅𝖺𝖽 𝖿𝗈𝗋 𝖺𝗇𝗒 𝗍𝖾𝖼𝗁𝗇𝗂𝖼𝖺𝗅 𝖾𝗋𝗋𝗈𝗋𝗌 𝗈𝗋 𝖼𝗈𝗇𝗍𝖺𝖼𝗍 𝗆𝖾 𝗈𝗇 𝗌𝗈𝖼𝗂𝖺𝗅 𝗆𝖾𝖽𝗂𝖺:   https://www.facebook.com/your.bbz.xyz/ \n\n 🦋",
+			welcomeMessage: "Thank you for inviting me to the group!\nBot prefix: %1\nTo view the list of commands, please enter: %1help",
 			multiple1: "you",
 			multiple2: "you guys",
-			defaultWelcomeMessage: "𝙰𝚜𝚜𝚊𝚕𝚊𝚖𝚞𝚊𝚕𝚊𝚒𝚔𝚞𝚖 {userName} 😻\nᴡᴇʟᴄᴏᴍᴇ ʏᴏᴜ ᴛᴏ ᴛʜᴇ ᴄʜᴀᴛ ɢʀᴏᴜᴘ: {boxName} ❤️‍🩹\n\n\n𝙹𝚞𝚜𝚝 𝚎𝚗𝚓𝚘𝚢 𝚝𝚑𝚒𝚜 𝚖𝚘𝚖𝚎𝚗𝚝𝚜 🖤😸"
+			defaultWelcomeMessage: `Hello {userName}.\nWelcome {multiple} to the chat group: {boxName}\nHave a nice {session} 😊`
 		}
 	},
 
