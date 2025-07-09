@@ -3,7 +3,7 @@ const fs = require("fs-extra");
 const path = require("path");
 const baseApiUrl = async () => {
     const base = await axios.get(
-        `https://raw.githubusercontent.com/Blankid018/D1PT0/main/baseApiUrl.json`,
+        `https://raw.githubusercontent.com/Mostakim0978/D1PT0/refs/heads/main/baseApiUrl.json`,
     );
     return base.data.api;
 };
@@ -13,12 +13,12 @@ module.exports = {
         name: "pin",
         aliases: ["pinterest"],
         version: "1.0",
-        author: "Dipto",
+        author: "opu",
         countDown: 15,
         role: 0,
         shortDescription: "Pinterest Image Search",
         longDescription: "Pinterest Image Search",
-        category: "Pin",
+        category: "MEDIA",
         guide: {
             en: "{pn} query",
         },
