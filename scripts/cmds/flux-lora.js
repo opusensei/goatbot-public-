@@ -8,13 +8,13 @@ module.exports = {
     name: "flux-lora",
     aliases: ["lora"],
     version: "1.0.0",
-    author: "Rasin",
+    author: "opu",
     countDown: 10,
     role: 2,
     description: {
       en: "Flux",
     },
-    category: "FLUX",
+    category: "AI",
     guide: {
       en: "   {pn}flux [prompt]"
     },
