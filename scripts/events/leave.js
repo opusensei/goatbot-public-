@@ -1,71 +1,98 @@
-const fs = require("fs-extra");
-const path = require("path");
+const { getTime, drive } = global.utils;
 
 module.exports = {
-  config: {
-    name: "leave",
-    version: "1.0.0",
-    author: "Adapted from Mirai Team",
-    category: "events",
-    eventType: ["log:unsubscribe"],
-    description: "Notifies when a user or the bot leaves the group",
-  },
+	config: {
+		name: "leave",
+		version: "1.4",
+		author: "NTKhang",
+		category: "events"
+	},
 
-  onStart: async ({ api, event, usersData, threadsData }) => {
-    try {
-      const { threadID } = event;
-      const leftUserId = event.logMessageData.leftParticipantFbId;
+	langs: {
+		vi: {
+			session1: "sáng",
+			session2: "trưa",
+			session3: "chiều",
+			session4: "tối",
+			leaveType1: "tự rời",
+			leaveType2: "bị kick",
+			defaultLeaveMessage: "{userName} đã {type} khỏi nhóm"
+		},
+		en: {
+			session1: "morning",
+			session2: "noon",
+			session3: "afternoon",
+			session4: "evening",
+			leaveType1: "left",
+			leaveType2: "was kicked from",
+			defaultLeaveMessage: "{userName} {type} the group"
+		}
+	},
 
-      // If the bot leaves the group, do nothing
-      if (leftUserId == api.getCurrentUserID()) return;
+	onStart: async ({ threadsData, message, event, api, usersData, getLang }) => {
+		if (event.logMessageType == "log:unsubscribe")
+			return async function () {
+				const { threadID } = event;
+				const threadData = await threadsData.get(threadID);
+				if (!threadData.settings.sendLeaveMessage)
+					return;
+				const { leftParticipantFbId } = event.logMessageData;
+				if (leftParticipantFbId == api.getCurrentUserID())
+					return;
+				const hours = getTime("HH");
 
-      const threadData = await threadsData.get(threadID);
+				const threadName = threadData.threadName;
+				const userName = await usersData.getName(leftParticipantFbId);
 
-      // Check if global.data is defined and if userName is accessible
-      let userName;
+				// {userName}   : name of the user who left the group
+				// {type}       : type of the message (leave)
+				// {boxName}    : name of the box
+				// {threadName} : name of the box
+				// {time}       : time
+				// {session}    : session
 
-      if (global.data && global.data.userName && typeof global.data.userName.get === 'function') {
-        userName = global.data.userName.get(leftUserId);
-      }
+				let { leaveMessage = getLang("defaultLeaveMessage") } = threadData.data;
+				const form = {
+					mentions: leaveMessage.match(/\{userNameTag\}/g) ? [{
+						tag: userName,
+						id: leftParticipantFbId
+					}] : null
+				};
 
-      // If userName is still undefined, fallback to usersData.getName
-      if (!userName) {
-        console.log(`User name not found in global data, fetching from usersData for ${leftUserId}`);
-        userName = await usersData.getName(leftUserId);
-      }
+				leaveMessage = leaveMessage
+					.replace(/\{userName\}|\{userNameTag\}/g, userName)
+					.replace(/\{type\}/g, leftParticipantFbId == event.author ? getLang("leaveType1") : getLang("leaveType2"))
+					.replace(/\{threadName\}|\{boxName\}/g, threadName)
+					.replace(/\{time\}/g, hours)
+					.replace(/\{session\}/g, hours <= 10 ?
+						getLang("session1") :
+						hours <= 12 ?
+							getLang("session2") :
+							hours <= 18 ?
+								getLang("session3") :
+								getLang("session4")
+					);
 
-      // Handle case where userName is still undefined (e.g., user left without name)
-      if (!userName) {
-        userName = "Unknown User";
-        console.warn(`Could not find user name for ${leftUserId}. Using default "Unknown User"`);
-      }
+				form.body = leaveMessage;
 
-      const isSelfLeave = event.author == leftUserId;
+				if (leaveMessage.includes("{userNameTag}")) {
+					form.mentions = [{
+						id: leftParticipantFbId,
+						tag: userName
+					}];
+				}
 
-      const leaveMessage = isSelfLeave
-        ? "ওকে কেউ কিছু বলোনা\n\nও চলে গেছে কারণ\nও কম দামী গাজা খায়...🙂"
-        : "মানুষটা কিক খাইলো রে\nএমনে মানুষ টা ভালাই ছিলো😫, ক্যান যে আবার মাতাব্বরি করতে গেল😂😆";
-
-      const customLeaveMessage = threadData.data.customLeave || "[ {name} ] {type}";
-      const finalMessage = customLeaveMessage
-        .replace(/\{name}/g, userName)
-        .replace(/\{type}/g, leaveMessage);
-
-      const cachePath = path.join(__dirname, "cache", "leaveGif");
-      const gifPath = path.join(cachePath, `leave.gif`);
-
-      // Ensure cache directory exists
-      if (!fs.existsSync(cachePath)) {
-        fs.mkdirSync(cachePath, { recursive: true });
-      }
-
-      const formPush = fs.existsSync(gifPath)
-        ? { body: finalMessage, attachment: fs.createReadStream(gifPath) }
-        : { body: finalMessage };
-
-      return api.sendMessage(formPush, threadID);
-    } catch (error) {
-      console.error("An error occurred while handling the leave event:", error);
-    }
-  },
+				if (threadData.data.leaveAttachment) {
+					const files = threadData.data.leaveAttachment;
+					const attachments = files.reduce((acc, file) => {
+						acc.push(drive.getFile(file, "stream"));
+						return acc;
+					}, []);
+					form.attachment = (await Promise.allSettled(attachments))
+						.filter(({ status }) => status == "fulfilled")
+						.map(({ value }) => value);
+				}
+				message.send(form);
+			};
+	}
 };
