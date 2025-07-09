@@ -2,14 +2,14 @@ const { GoatWrapper } = require("fca-liane-utils");
 module.exports = {
   config: {
     name: "pp",
-    aliases: ["pfp"],
+    aliases: ["pfp", "pp", "dp"],
     version: "1.1",
-    author: "NIB",
+    author: "opu",
     countDown: 5,
     role: 0,
     shortDescription: "PROFILE image",
     longDescription: "PROFILE image",
-    category: "image",
+    category: "FUN",
     guide: {
       en: "   {pn} @tag"
     }
