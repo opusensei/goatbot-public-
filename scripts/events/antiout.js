@@ -39,7 +39,7 @@ module.exports = {
             );
           } else {
             api.sendMessage(
-              `কি ভাবছিলি লিভ নিবি...? 😒\n\nআমি থাকতে পারলে লো দেহি লিভ 😏😴\n\n[ ${userName} ] ~ has been re-added to the Group 🌚`,
+              `\n[ ${userName} ] ~ has been re-added to the Group 🌚`,
               threadID
             );
           }
