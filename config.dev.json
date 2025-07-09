@@ -2,8 +2,8 @@
   "language": "en",
   "notesLanguage": "change to your language with ISO 639-1 code, available languages: vi (Vietnamese), en (English)",
   "facebookAccount": {
-    "email": "your_gmail@gmail.com",
-    "password": "mone.nai",
+    "email": "gojo.bot25@gmail.com ",
+    "password": "@gojo-bot+999",
     "2FASecret": "",
     "i_user": "",
     "proxy": null,
@@ -16,7 +16,7 @@
     "enable": false,
     "ignoreCommand": []
   },
-  "authorName": "Iı TASBIUL Iı",
+  "authorName": " Sensei ",
   "authorFB": "https://www.facebook.com/id.link.niye.muri.khaw",
   "API": {
     "DIPTO": "https://www.noobs-api.000.pe/dipto",
@@ -25,37 +25,37 @@
     "rubishapi": "https://rubish-apihub.onrender.com/rubish",
     "RASIN": "https://rasin-x-apis.onrender.com"
   },
-  "nickNameBot": "Your_Bot_Name",
-  "prefix": "!",
+  "nickNameBot": "𝐂𝐇𝐈𝐊𝐎 🎀",
+  "prefix": "+",
   "vipUser": [
-    "100083520680035",
-    "100018893430564"
+    "61577055977574",
+    ""
   ],
   "orgDEV": [
-    "61559599768817",
+    "61577055977574",
     "",
-    "100083520680035"
+    ""
   ],
   "LDEV": [
-    "61559599768817",
-    "100083520680035"
+    "61577055977574",
+    ""
   ],
   "adminBot": [
-    "100083520680035",
-    "61559599768817",
-    "100018893430564",
-    "61557991443492"
+    "61577055977574",
+    "",
+    "",
+    ""
   ],
   "DEV": [
-    "100083520680035",
-    "61559599768817",
-    "100018893430564",
-    "100033670741301"
+    "61577055977574",
+    "",
+    "",
+    ""
   ],
   "whiteListMode": {
     "enable": false,
     "whiteListIds": [
-      "100083520680035"
+      "61577055977574"
     ],
     "notes": "if you enable this feature, only the ids in the whiteListIds section can use the bot"
   },
