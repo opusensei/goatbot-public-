@@ -1,43 +1,49 @@
 const axios = require("axios");
 
-const baseApiUrl = async () => {
-  const base = await axios.get(
-    `https://raw.githubusercontent.com/Mostakim0978/D1PT0/refs/heads/main/baseApiUrl.json`
-  );
-  return base.data.mostakim;
-};
-module.exports.config = {
-  name: "4k",
-  aliases: ["4k", "remini"],
-  category: "AI",
-  author: "opu"
-};
+module.exports = {
+  config: {
+    name: "4k",
+    aliases: ["upscale"],
+    version: "1.1",
+    role: 0,
+    author: "opu",
+    countDown: 5,
+    longDescription: "Upscale images to 4K resolution.",
+    category: "IMAGE",
+    guide: {
+      en: "${pn} reply to an image to upscale it to 4K resolution."
+    }
+  },
 
-module.exports.onStart = async ({ api, event, args }) => {
-  try {
-
-    if (!event.messageReply || !event.messageReply.attachments || !event.messageReply.attachments[0]) {
-      return api.sendMessage("𝐏𝐥𝐞𝐚𝐬𝐞 𝐫𝐞𝐩𝐥𝐲 𝐭𝐨 𝐚𝐧 𝐢𝐦𝐚𝐠𝐞 𝐰𝐢𝐭𝐡 𝐭𝐡𝐞 𝐜𝐨𝐦𝐦𝐚𝐧𝐝.", event.threadID, event.messageID);
+  onStart: async function ({ message, event }) {
+    if (
+      !event.messageReply ||
+      !event.messageReply.attachments ||
+      !event.messageReply.attachments[0] ||
+      event.messageReply.attachments[0].type !== "photo"
+    ) {
+      return message.reply("📸 Please reply to an image to upscale it.");
     }
 
+    const imgurl = encodeURIComponent(event.messageReply.attachments[0].url);
+    const upscaleUrl = `https://aryan-xyz-upscale-api-phi.vercel.app/api/upscale-image?imageUrl=${imgurl}&apikey=ArYANAHMEDRUDRO`;
 
-    const Romim = event.messageReply?.attachments[0]?.url;
+    message.reply("🔄 Processing your image, please wait...", async (err, info) => {
+      try {
+        const response = await axios.get(upscaleUrl);
+        const imageUrl = response.data.resultImageUrl;
+        const attachment = await global.utils.getStreamFromURL(imageUrl, "upscaled.png");
 
+        message.reply({
+          body: "✅ Your 4K upscaled image is ready!",
+          attachment
+        });
 
-    const apiUrl = (`${await baseApiUrl()}/remini?input=${encodeURIComponent(Romim)}`);
- 
-
-    const imageStream = await axios.get(apiUrl,{
-      responseType: 'stream'
+        message.unsend(info.messageID);
+      } catch (error) {
+        console.error("Upscale Error:", error.message);
+        message.reply("❌ Error occurred while upscaling the image.");
+      }
     });
-
-
-    api.sendMessage({
-      body: "𝐇𝐞𝐫𝐞 𝐢𝐬 𝐲𝐨𝐮𝐫 𝐞𝐧𝐡𝐚𝐧𝐜𝐞𝐝 𝐩𝐡𝐨𝐭𝐨",
-      attachment: imageStream.data
-    }, event.threadID, event.messageID);
-
-  } catch (e) {
-    api.sendMessage(`Error: ${e.message}`, event.threadID, event.messageID);
   }
 };
